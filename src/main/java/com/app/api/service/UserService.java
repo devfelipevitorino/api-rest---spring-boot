@@ -1,6 +1,7 @@
 package com.app.api.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public String save(UserDTO userDTO) {
+	public User save(UserDTO userDTO) {
 	    User user = new User();
 	    
 	    user.setName(userDTO.name());
@@ -26,33 +27,33 @@ public class UserService {
 
 	    User savedUser = userRepository.save(user);
 	    
-	    String message = "Usuário " + savedUser.getName() + " cadastrado com sucesso!";
-	    
-	    return message;
+	    return savedUser;
 	}
 	
-	public List<UserDTO> findAll(){
-		List<User> userAll = userRepository.findAll();
-		return userAll.stream()
-				.map(User -> new UserDTO(
-						User.getName(),
-						User.getEmail(),
-						User.getPassword(),
-						User.getFavoriteTeam()))
-				.collect(Collectors.toList());
+	public List<UserDTO> findAll() {
+	    List<User> userAll = userRepository.findAll();
+	    return userAll.stream()
+	            .map(user -> new UserDTO(
+	                    user.getName(),
+	                    user.getEmail(),
+	                    null, 
+	                    user.getFavoriteTeam()
+	            ))
+	            .collect(Collectors.toList());
 	}
 	
-	public String update(UserDTO userDTO, Long id) {
-		 User user = userRepository.findById(id).orElseThrow();
-		 
-		 user.setName(userDTO.name());
-		 user.setEmail(userDTO.email());
-		 user.setPassword(userDTO.password());
-		 user.setFavoriteTeam(userDTO.favoriteTeam());
-		 
-		 userRepository.save(user);
-		 
-		 return user.getName() + " atualizado com sucesso!";
+	public User update(UserDTO userDTO, Long id) {
+	    User user = userRepository.findById(id)
+	            .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
+
+	    user.setName(userDTO.name());
+	    user.setEmail(userDTO.email());
+	    if (userDTO.password() != null && !userDTO.password().isEmpty()) {
+	        user.setPassword(userDTO.password());
+	    }
+	    user.setFavoriteTeam(userDTO.favoriteTeam());
+
+	    return userRepository.save(user);
 	}
 	
 	public String delete(Long id) {
