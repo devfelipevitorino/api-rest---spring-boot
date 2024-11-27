@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.app.api.DTO.UserDTO;
@@ -16,13 +17,16 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 
 	public User save(UserDTO userDTO) {
 	    User user = new User();
 	    
 	    user.setName(userDTO.name());
 	    user.setEmail(userDTO.email());
-	    user.setPassword(userDTO.password());
+	    user.setPassword(passwordEncoder.encode(userDTO.password()));
 	    user.setFavoriteTeam(userDTO.favoriteTeam());
 
 	    User savedUser = userRepository.save(user);

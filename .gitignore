@@ -32,3 +32,10 @@ Thumbs.db
 
 # NetBeans
 nbproject/private/
+
+# IDE-specific files
+.vscode/
+
+# macOS-specific
+.AppleDouble
+.LSOverride
