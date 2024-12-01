@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	
 	
+	@SuppressWarnings("removal")
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -18,6 +19,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
             	.requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/user/**").permitAll() 
+                .requestMatchers("/swagger-ui/**").permitAll() 
+                .requestMatchers("/v3/api-docs/**").permitAll() 
+                .requestMatchers("/swagger-resources/**").permitAll() 
                 .anyRequest().authenticated() 
             )
             .headers(headers -> headers.frameOptions().disable()) 
