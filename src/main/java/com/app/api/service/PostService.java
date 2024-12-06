@@ -40,7 +40,7 @@ public class PostService {
 	            .map(post -> new PostDTO(
 	                    post.getContent(),
 	                    post.getMedia(),
-	                    post.getUser().getId() 
+	                    post.getUser().getId()
 	            ))
 	            .collect(Collectors.toList());
 	}
