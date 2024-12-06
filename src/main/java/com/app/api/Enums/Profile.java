@@ -1,4 +1,4 @@
-package Enums;
+package com.app.api.Enums;
 
 public enum Profile {
 
